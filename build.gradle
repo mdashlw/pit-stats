@@ -1,0 +1,95 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://files.minecraftforge.net/maven'
+        }
+        maven {
+            url 'https://repo.spongepowered.org/maven'
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+
+group 'ru.mdashlw.hypixel.pit.stats'
+version '1.3.1'
+archivesBaseName = 'The Hypixel Pit - Epic Stats'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+compileJava.options.encoding = 'UTF-8'
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://repo.spongepowered.org/maven/'
+    }
+}
+
+dependencies {
+    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        transitive = false
+    }
+    embed 'org.apache.httpcomponents:httpclient:4.5.13'
+    embed 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
+}
+
+minecraft {
+    version = '1.8.9-11.15.1.2318-1.8.9'
+    runDir = 'run'
+    mappings = 'stable_22'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    archiveName = "${jar.baseName} - ${jar.version}.${jar.extension}"
+
+    from configurations.embed.collect {
+        it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'module-info.class'
+        }
+    }
+
+    manifest.attributes(
+            'FMLCorePluginContainsFMLMod': true,
+            'ForceLoadAsMod': true,
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'TweakOrder': 0,
+            'MixinConfigs': 'mixins.pitstats.json',
+            'FMLCorePlugin': 'ru.mdashlw.hypixel.pit.stats.asm.ModCore'
+    )
+}
+
+sourceSets {
+    main {
+        ext.refMap = 'mixins.pitstats.refmap.json'
+    }
+}

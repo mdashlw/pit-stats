@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.6",
+  "package": "ru.mdashlw.hypixel.pit.stats.asm.mixins",
+  "refmap": "mixins.pitstats.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinItemStack"
+  ]
+}
