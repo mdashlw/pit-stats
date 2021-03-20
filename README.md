@@ -16,7 +16,7 @@ You can watch a review of this on YouTube: https://youtu.be/RQRD0_a83fI. Please 
 
 Display required pants color to Tier III for fresh/T1/T2 mystic items. Enabled by default.
 
-Enable/disable this feature: **/pit pants**.
+Enable/disable this feature: **/pit config pants**.
 
 ![](https://media.discordapp.net/attachments/731504203591319553/819647045153456178/unknown.png)
 

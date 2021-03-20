@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.mojang.authlib.GameProfile;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Locale;
@@ -11,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import net.minecraft.server.MinecraftServer;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,24 +40,27 @@ public final class HypixelAPI {
     this.apiKey = apiKey;
   }
 
-  public CompletableFuture<Player> getPlayerByNameAsync(final String name) {
-    return CompletableFuture.supplyAsync(() -> this.getPlayerByName(name), this.executor);
+  public CompletableFuture<Player> getPlayerAsync(final String name) {
+    return CompletableFuture.supplyAsync(() -> this.getPlayer(name), this.executor);
   }
 
-  public Player getPlayerByName(final String name) {
-    final String lowerName = name.toLowerCase(Locale.ENGLISH);
-    final String cachedUUID = this.cacheNameToUUID.getIfPresent(lowerName);
-
-    if (cachedUUID != null && cachedUUID.equals("null")) {
-      return null;
-    }
-
+  public Player getPlayer(final String name) {
     final String url;
 
-    if (cachedUUID != null) {
-      url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + cachedUUID;
+    if (name.length() == 32 || name.length() == 36) {
+      url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + name;
     } else {
-      url = "https://api.hypixel.net/player?key=" + this.apiKey + "&name=" + name;
+      final String cachedUUID = this.cacheNameToUUID.getIfPresent(name.toLowerCase(Locale.ENGLISH));
+
+      if (cachedUUID != null && cachedUUID.equals("null")) {
+        return null;
+      }
+
+      if (cachedUUID != null) {
+        url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + cachedUUID;
+      } else {
+        url = "https://api.hypixel.net/player?key=" + this.apiKey + "&name=" + name;
+      }
     }
 
     final HttpGet request = new HttpGet(url);
@@ -64,18 +69,31 @@ public final class HypixelAPI {
       final JsonNode data = this.objectMapper.readTree(response.getEntity().getContent());
 
       if (!data.get("success").asBoolean()) {
-        throw new HypixelApiException(JsonUtils.getOptionalText(data, "cause", "no cause"));
+        final String cause = JsonUtils.getOptionalText(data, "cause", "no cause");
+
+        if (cause.equals("You have already looked up this name recently")) {
+          final GameProfile gameProfile = MinecraftServer.getServer().getPlayerProfileCache()
+              .getGameProfileForUsername(name);
+
+          if (gameProfile != null) {
+            return this.getPlayer(gameProfile.getId().toString());
+          }
+        }
+
+        throw new HypixelApiException(cause);
       }
 
       final JsonNode playerData = data.get("player");
 
       if (playerData == null || playerData.isNull()) {
-        this.cacheNameToUUID.put(lowerName, "null");
+        this.cacheNameToUUID.put(name.toLowerCase(Locale.ENGLISH), "null");
         return null;
       }
 
-      this.cacheNameToUUID.put(lowerName, playerData.get("uuid").asText());
-      return new Player(playerData);
+      final Player player = new Player(playerData);
+
+      this.cacheNameToUUID.put(player.getName().toLowerCase(Locale.ENGLISH), player.getUUID());
+      return player;
     } catch (final IOException exception) {
       throw new UncheckedIOException(exception);
     }

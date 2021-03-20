@@ -52,7 +52,12 @@ public final class Player {
     }
 
     name = JsonUtils.getOptionalText(this.data, "username");
-    return name;
+
+    if (name != null) {
+      return name;
+    }
+
+    return "UnknownName";
   }
 
   public Rank getRank() {

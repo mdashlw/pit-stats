@@ -103,7 +103,7 @@ public final class PitCommand extends Command {
                 .setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://pitpanda.rocks/players/" + playerName))))
         .appendText("§7..."));
 
-    mod.getHypixelAPI().getPlayerByNameAsync(playerName)
+    mod.getHypixelAPI().getPlayerAsync(playerName)
         .thenAccept(player -> {
           if (player == null) {
             sender.addChatMessage(new ChatComponentText("§9[§6PIT§9] §7Player §c" + playerName + " §7does not exist."));
@@ -163,7 +163,7 @@ public final class PitCommand extends Command {
             exception = exception.getCause();
           }
 
-          HypixelPitStats.getLogger().error("Failed to fetch player by name {}", playerName, exception);
+          HypixelPitStats.getLogger().error("Failed to fetch player data by name {}", playerName, exception);
 
           if (exception instanceof HypixelApiException) {
             sender.addChatMessage(

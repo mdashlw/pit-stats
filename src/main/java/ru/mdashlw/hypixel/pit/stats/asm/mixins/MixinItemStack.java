@@ -53,7 +53,13 @@ public final class MixinItemStack {
           final int tier = extraAttributes.getInteger("UpgradeTier");
 
           if (tier != 3) {
-            final String color = MixinItemStack.COLORS.get(nonce % 5);
+            final int colorIndex = nonce % 5;
+
+            if (colorIndex < 0) {
+              return;
+            }
+
+            final String color = MixinItemStack.COLORS.get(colorIndex);
 
             if (!tooltip.isEmpty()) {
               if (tooltip.get(tooltip.size() - 1).endsWith("Attack Damage")) {
