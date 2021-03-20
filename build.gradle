@@ -23,7 +23,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 
 group 'ru.mdashlw.hypixel.pit.stats'
-version '1.3.2'
+version '1.3.3'
 archivesBaseName = 'The Hypixel Pit - Epic Stats'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8

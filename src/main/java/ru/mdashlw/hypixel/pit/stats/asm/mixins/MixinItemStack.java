@@ -53,9 +53,9 @@ public final class MixinItemStack {
           final int tier = extraAttributes.getInteger("UpgradeTier");
 
           if (tier != 3) {
-            final int colorIndex = nonce % 5;
+            final int colorIndex = Math.abs(nonce) % 5;
 
-            if (colorIndex < 0) {
+            if (colorIndex >= MixinItemStack.COLORS.size()) {
               return;
             }
 
