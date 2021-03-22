@@ -235,3 +235,5 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/vscode,sublimetext,windows,linux,intellij,forgegradle,gradle,java
+
+gradle.properties
