@@ -115,12 +115,12 @@ public final class Player {
     return rank.getColor() + name;
   }
 
-  public int getLevel() {
+  public double getLevel() {
     final int networkExp = JsonUtils.getOptionalInt(this.data, "networkExp");
     final int networkLevel = JsonUtils.getOptionalInt(this.data, "networkLevel");
     final double exp = networkExp + ILeveling.getTotalExpToFullLevel(networkLevel + 1);
 
-    return (int) ILeveling.getLevel(exp);
+    return ILeveling.getExactLevel(exp);
   }
 
   public int getAchievementPoints() {
@@ -144,6 +144,14 @@ public final class Player {
     final long lastLogout = this.getLastLogout();
 
     return lastLogin != 0 && lastLogout != 0 && lastLogin > lastLogout;
+  }
+
+  public GameType getMostRecentGameType() {
+    try {
+      return GameType.valueOf(JsonUtils.getOptionalText(this.data, "mostRecentGameType", "UNKNOWN"));
+    } catch (final IllegalArgumentException ignored) {
+      return GameType.UNKNOWN;
+    }
   }
 
   public Stats getStats() {
@@ -508,6 +516,18 @@ public final class Player {
 
         public List<ItemStack> getEnderChest() {
           return this.parseInventory("inv_enderchest");
+        }
+
+        public List<ItemStack> getMysticWellItem() {
+          return this.parseInventory("mystic_well_item");
+        }
+
+        public List<ItemStack> getMysticWellPants() {
+          return this.parseInventory("mystic_well_pants");
+        }
+
+        public long getLastSave() {
+          return JsonUtils.getOptionalLong(this.data, "last_save");
         }
 
         public int getCash() {

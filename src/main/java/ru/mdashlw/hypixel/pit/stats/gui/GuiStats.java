@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import ru.mdashlw.hypixel.api.data.GameType;
 import ru.mdashlw.hypixel.api.data.Guild;
 import ru.mdashlw.hypixel.api.data.Player;
 import ru.mdashlw.hypixel.api.data.Player.Stats.Pit;
@@ -94,6 +96,22 @@ public final class GuiStats extends GuiScreen {
       slots.add(new SlotArmor(3 - index, -16, 141 + (3 - index) * 18, itemStack));
     }
 
+    final List<ItemStack> mysticWell = new ArrayList<>();
+
+    mysticWell.add(ItemStackUtils.withDisplay(
+        new ItemStack(Blocks.enchanting_table),
+        "§dMystic Well",
+        Collections.emptyList()
+    ));
+    mysticWell.addAll(profile.getMysticWellItem());
+    mysticWell.addAll(profile.getMysticWellPants());
+
+    for (int index = 0; index < 3; index++) {
+      final ItemStack itemStack = index < mysticWell.size() ? mysticWell.get(index) : null;
+
+      slots.add(new Slot(176, 141 + index * 18, itemStack));
+    }
+
     final List<ItemStack> customItems = new ArrayList<>();
 
     customItems.add(ItemStackUtils.withDisplay(
@@ -103,20 +121,24 @@ public final class GuiStats extends GuiScreen {
         ),
         player.getFormattedName(),
         Arrays.asList(
-            "§7Hypixel Level: §6" + player.getLevel(),
+            String.format(Locale.US, "§7Hypixel Level: §6%.2f", player.getLevel()),
             String.format(Locale.US, "§7Achievement Points: §e%,d", player.getAchievementPoints()),
             "§7Guild: §b" + (guild == null ? "None" : guild.getName()),
             String.format(Locale.US, "§7Karma: §d%,d", player.getKarma()),
             "",
-            "§7Status: " + (player.getLastLogin() == 0 || player.getLastLogout() == 0 ? "§cUnknown" :
-                (player.isOnline() ? "§aOnline" : "§cOffline")),
+            "§7Status: " + (player.getLastLogin() == 0 || player.getLastLogout() == 0
+                ? "§cUnknown"
+                : (player.isOnline() ? "§aOnline" : "§cOffline")),
             player.isOnline() ? ("§7For " + (player.getLastLogin() == 0 ? "§cUnknown" :
                 "§b" + DurationUtils.format(Duration.ofMillis(System.currentTimeMillis() - player.getLastLogin()))))
                 : ("§7Last Online: " +
-                    (player.getLastLogout() == 0 ? "§cUnknown" :
-                        "§b" + DurationUtils.format(
+                    (player.getLastLogout() == 0 ? "§cUnknown"
+                        : "§b" + DurationUtils.format(
                             Duration.ofMillis(System.currentTimeMillis() - player.getLastLogout()))
-                            + " ago"))
+                            + " ago")),
+            (player.isOnline()
+                ? ("§7Game: §9")
+                : ("§7Last Game: §9")) + player.getMostRecentGameType().getDisplayName()
         )
     ));
     customItems.add(ItemStackUtils.withDisplay(
@@ -132,7 +154,12 @@ public final class GuiStats extends GuiScreen {
             "",
             profile.getBounty() == 0 ? null : String.format(Locale.US, "§7Bounty: §6%,dg", profile.getBounty()),
             profile.getBounty() == 0 ? null : "",
-            String.format(Locale.US, "§7Renown: §e%,d", profile.getRenown())
+            String.format(Locale.US, "§7Renown: §e%,d", profile.getRenown()),
+            "",
+            "§7Last Seen: " + (profile.getLastSave() == 0
+                ? "§cUnknown"
+                : "§b" + DurationUtils.format(Duration.ofMillis(System.currentTimeMillis() - profile.getLastSave()))
+                    + " ago")
         )
     ));
 
@@ -315,7 +342,7 @@ public final class GuiStats extends GuiScreen {
             String.format(Locale.US, "§7Wheat Farmed: §a%,d", JsonUtils.getOptionalInt(statistics, "wheat_farmed")),
             String.format(Locale.US, "§7Gold from Farming: §a%,d",
                 JsonUtils.getOptionalInt(statistics, "gold_from_farming")),
-            String.format(Locale.US, "§7Gold from Selling Fish: §cN/A"), // todo
+            "§7Gold from Selling Fish: §cN/A", // todo
             "",
             String.format(Locale.US, "§7King's Quest Completed: §a%,d",
                 JsonUtils.getOptionalInt(statistics, "king_quest_completion")),
@@ -356,6 +383,9 @@ public final class GuiStats extends GuiScreen {
     this.mc.getTextureManager().bindTexture(GuiStats.INVENTORY_TEXTURE);
     this.drawTexturedModalRect(this.x - 24, this.y + 133, 0, 0, 25, 80);
     this.drawTexturedModalRect(this.x - 24, this.y + 213, 0, 160, 25, 6);
+    this.drawTexturedModalRect(this.x + this.xSize - 1 + 18, this.y + 133, 169, 0, 7, 61);
+    this.drawTexturedModalRect(this.x + this.xSize - 1, this.y + 133, 7, 0, 18, 61);
+    this.drawTexturedModalRect(this.x + this.xSize - 1, this.y + 194, 151, 159, 25, 7);
     this.mc.getTextureManager().bindTexture(GuiStats.CHEST_TEXTURE);
     this.drawTexturedModalRect(this.x, this.y + 4, 0, 4, this.xSize, 121);
     this.drawTexturedModalRect(this.x, this.y + 125, 0, 126, this.xSize, 96);
@@ -396,7 +426,7 @@ public final class GuiStats extends GuiScreen {
     }
 
     RenderHelper.disableStandardItemLighting();
-    this.fontRendererObj.drawString("The Hypixel Pit", 8, -25, 4210752);
+    this.fontRendererObj.drawString(GameType.PIT.getDisplayName(), 8, -25, 4210752);
     this.fontRendererObj.drawString(I18n.format("container.enderchest"), 8, 6, 4210752);
     this.fontRendererObj.drawString(I18n.format("container.inventory"), 8, this.ySize - 94, 4210752);
     RenderHelper.enableGUIStandardItemLighting();
