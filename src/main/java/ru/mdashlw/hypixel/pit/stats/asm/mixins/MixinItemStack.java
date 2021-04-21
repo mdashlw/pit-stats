@@ -7,6 +7,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,9 +31,11 @@ public final class MixinItemStack {
       method = "getTooltip",
       at = @At(
           value = "INVOKE",
-          target = "Lnet/minecraft/item/ItemStack;getAttributeModifiers()Lcom/google/common/collect/Multimap;"
+          target = "Lnet/minecraft/item/ItemStack;getAttributeModifiers()Lcom/google/common/collect/Multimap;",
+          ordinal = 0,
+          opcode = Opcodes.INVOKEVIRTUAL
       ),
-      locals = LocalCapture.CAPTURE_FAILSOFT
+      locals = LocalCapture.CAPTURE_FAILHARD
   )
   public void getTooltip(final EntityPlayer player, final boolean advanced,
       final CallbackInfoReturnable<List<String>> cir,
@@ -71,6 +75,40 @@ public final class MixinItemStack {
               }
             }
           }
+        }
+      }
+    }
+  }
+
+  @Inject(
+      method = "isItemEnchanted",
+      at = @At("RETURN"),
+      cancellable = true
+  )
+  public void isItemEnchanted(final CallbackInfoReturnable<Boolean> cir) {
+    final HypixelPitStats mod = HypixelPitStats.getInstance();
+
+    if (mod == null) {
+      return;
+    }
+
+    if (!mod.getSettings().isBetterGlint()) {
+      return;
+    }
+
+    final Item item = this.item;
+
+    if (item != null && (item == Items.leather_leggings || item == Items.golden_sword || item == Items.bow)) {
+      final NBTTagCompound nbt = this.stackTagCompound;
+
+      if (nbt != null && nbt.hasKey("ExtraAttributes", 10)) {
+        final NBTTagCompound extraAttributes = (NBTTagCompound) nbt.getTag("ExtraAttributes");
+        final int nonce = extraAttributes.getInteger("Nonce");
+
+        if (nonce != 0) {
+          final NBTTagList customEnchants = extraAttributes.getTagList("CustomEnchants", 10);
+
+          cir.setReturnValue(customEnchants.tagCount() != 0);
         }
       }
     }

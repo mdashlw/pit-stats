@@ -57,17 +57,25 @@ public final class PitCommand extends Command {
       return;
     }
 
-    if (playerName.equalsIgnoreCase("config") || playerName.equalsIgnoreCase("cfg")) {
+    if (playerName.equalsIgnoreCase("config") ||
+        playerName.equalsIgnoreCase("cfg") ||
+        playerName.equalsIgnoreCase("settings")) {
       final Settings settings = mod.getSettings();
 
       if (args.length == 1) {
         sender.addChatMessage(new ChatComponentText("§9[§6PIT§9] §7Mod Configuration (click to toggle on/off)\n")
-            .appendSibling(new ChatComponentText("§8> §fDisplay required pants for mystic items §8- " +
-                (settings.isDisplayRequiredPants() ? "§aON" : "§cOFF"))
+            .appendSibling(new ChatComponentText(" §8- §fDisplay required pants for mystic items: " +
+                (settings.isDisplayRequiredPants() ? "§aON" : "§cOFF") + "\n")
                 .setChatStyle(new ChatStyle()
                     .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                         new ChatComponentText("§7Click to toggle this setting on/off")))
-                    .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/pit config pants")))));
+                    .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/pit config pants"))))
+            .appendSibling(new ChatComponentText(" §8- §fAdd enchant glint for pit items: " +
+                (settings.isBetterGlint() ? "§aON" : "§cOFF"))
+                .setChatStyle(new ChatStyle()
+                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        new ChatComponentText("§7Click to toggle this setting on/off")))
+                    .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/pit config glint")))));
         return;
       }
 
@@ -78,6 +86,11 @@ public final class PitCommand extends Command {
         settings.save();
         sender.addChatMessage(new ChatComponentText("§9[§6PIT§9] §7Display required pants for mystic items is now " +
             (settings.isDisplayRequiredPants() ? "§aenabled" : "§cdisabled") + "§7."));
+      } else if (option.equalsIgnoreCase("glint")) {
+        settings.setBetterGlint(!settings.isBetterGlint());
+        sender.addChatMessage(new ChatComponentText("§9[§6PIT§9] §7Add enchant glint for pit items now " +
+            (settings.isBetterGlint() ? "§aenabled" : "§cdisabled") + "§7."));
+        settings.save();
       } else {
         sender.addChatMessage(new ChatComponentText("§9[§6PIT§9] §7Invalid config option."));
       }

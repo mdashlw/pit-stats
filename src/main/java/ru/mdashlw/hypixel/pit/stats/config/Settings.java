@@ -8,6 +8,7 @@ public final class Settings {
   private final Configuration configuration;
   private String apiKey;
   private boolean displayRequiredPants;
+  private boolean betterGlint;
 
   public Settings(final Configuration configuration) {
     this.configuration = configuration;
@@ -40,6 +41,14 @@ public final class Settings {
     } else {
       property.set(this.displayRequiredPants);
     }
+
+    property = this.configuration.get("general", "better_glint", true);
+
+    if (load) {
+      this.betterGlint = property.getBoolean();
+    } else {
+      property.set(this.betterGlint);
+    }
   }
 
   public String getApiKey() {
@@ -56,5 +65,13 @@ public final class Settings {
 
   public void setDisplayRequiredPants(final boolean displayRequiredPants) {
     this.displayRequiredPants = displayRequiredPants;
+  }
+
+  public boolean isBetterGlint() {
+    return this.betterGlint;
+  }
+
+  public void setBetterGlint(final boolean betterGlint) {
+    this.betterGlint = betterGlint;
   }
 }
