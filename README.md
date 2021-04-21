@@ -10,15 +10,22 @@ The main purpose of this mod is to provide an improved version of /view command 
 
 Use **/pit <name> (or /pitstats, /pitinfo)** command to open the statistics viewer.
 
-You can watch a review of this on YouTube: https://youtu.be/RQRD0_a83fI. Please note that this video is slightly outdated.
+You can watch a review of this on YouTube: https://youtu.be/RQRD0_a83fI. Please note that this video is slightly
+outdated.
 
-### Required Pants for Mystic Items
+### Required Pants for Mystic Items (since v1.3.1)
 
 Display required pants color to Tier III for fresh/T1/T2 mystic items. Enabled by default.
 
 Enable/disable this feature: **/pit config pants**.
 
 ![](https://media.discordapp.net/attachments/731504203591319553/819647045153456178/unknown.png)
+
+### Better Glint (since v1.5.0)
+
+If enabled, pit items will have an enchant glint if they got custom enchants.
+
+Enable/disable this feature: **/pit config glint**.
 
 ## Getting Started
 
