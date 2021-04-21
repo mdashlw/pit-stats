@@ -23,7 +23,7 @@ Enable/disable this feature: **/pit config pants**.
 
 ### Better Glint (since v1.5.0)
 
-If enabled, pit items will have an enchant glint if they got custom enchants.
+If enabled (default), pit items will have an enchant glint if they got custom enchants.
 
 Enable/disable this feature: **/pit config glint**.
 
