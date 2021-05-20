@@ -169,6 +169,7 @@ public final class Player {
     JR_HELPER("§9[JR HELPER] ", "§9"),
     HELPER("§9[HELPER] ", "§9"),
     MODERATOR("§2[MOD] ", "§2"),
+    GAME_MASTER("§2[GM] ", "§2"),
     ADMIN("§c[ADMIN] ", "§c");
 
     private final String prefix;

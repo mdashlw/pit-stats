@@ -11,7 +11,7 @@ import ru.mdashlw.hypixel.pit.stats.command.impl.PitCommand;
 import ru.mdashlw.hypixel.pit.stats.config.Settings;
 import ru.mdashlw.hypixel.pit.stats.listeners.ChatListener;
 
-@Mod(modid = "pitstats", name = "Hypixel Pit Stats", version = "1.5.0", clientSideOnly = true)
+@Mod(modid = "pitstats", name = "Hypixel Pit Stats", version = "1.5.1", clientSideOnly = true)
 public final class HypixelPitStats {
 
   @Mod.Instance
