@@ -24,6 +24,8 @@ import ru.mdashlw.hypixel.api.util.JsonUtils;
 
 public final class HypixelAPI {
 
+  private static final String MISSING_CACHE_VALUE = "null";
+
   private final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
   private final HttpClient httpClient = HttpClients.custom()
       .setMaxConnTotal(24)
@@ -52,7 +54,7 @@ public final class HypixelAPI {
     } else {
       final String cachedUuid = this.cacheNameToUuid.getIfPresent(name.toLowerCase(Locale.ENGLISH));
 
-      if (cachedUuid != null && cachedUuid.equals("null")) {
+      if (cachedUuid == HypixelAPI.MISSING_CACHE_VALUE) {
         return null;
       }
 
@@ -86,7 +88,7 @@ public final class HypixelAPI {
       final JsonNode playerData = data.get("player");
 
       if (playerData == null || playerData.isNull()) {
-        this.cacheNameToUuid.put(name.toLowerCase(Locale.ENGLISH), "null");
+        this.cacheNameToUuid.put(name.toLowerCase(Locale.ENGLISH), HypixelAPI.MISSING_CACHE_VALUE);
         return null;
       }
 
