@@ -17,11 +17,11 @@ public final class ChatListener {
 
   @SubscribeEvent(receiveCanceled = true)
   public void onChatMessageReceived(final ClientChatReceivedEvent event) {
-    final String text = event.message.getUnformattedText();
-
-    if (text.isEmpty()) {
+    if (event.type != 0) {
       return;
     }
+
+    final String text = event.message.getUnformattedText();
 
     if (text.startsWith(ChatListener.NEW_KEY_PATTERN)) {
       final String key = text.substring(ChatListener.NEW_KEY_PATTERN.length());
