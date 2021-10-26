@@ -31,7 +31,7 @@ public final class ChatListener {
           .appendSibling(new ChatComponentText("§a[Click here] §7to use §9" + key)
               .setChatStyle(new ChatStyle()
                   .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                      new ChatComponentText("§7Update a Hypixel API key in §6Hypixel Pit Stats")))
+                      new ChatComponentText("§7Set this Hypixel API key in §6Hypixel Pit Stats")))
                   .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/pit " + key)))));
     }
   }
