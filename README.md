@@ -6,18 +6,18 @@ Advanced Stats Viewer for The Hypixel Pit.
 
 ### Stats Viewer
 
-The main purpose of this mod is to provide an improved version of /view command for viewing inventory/enderchest, selected perks/killstreaks and various Pit statistics.
-
-Use **/pit <name> (or /pitstats, /pitinfo)** command to open the statistics viewer.
+The main purpose of this mod is to provide an improved version of the /view command for viewing inventory/enderchest, selected perks/killstreaks and various Pit statistics.
 
 You can watch a review of this on YouTube: https://youtu.be/RQRD0_a83fI. Please note that this video is slightly
 outdated.
 
+Use **/pit <name> (or /pitstats, /pitinfo)** to open the statistics viewer.
+
 ### Required Pants for Mystic Items (since v1.3.1)
 
-Display required pants color to Tier III for fresh/T1/T2 mystic items. Enabled by default.
+Display required pants color to Tier III for fresh/T1/T2 mystic items.
 
-Enable/disable this feature: **/pit config pants**.
+This is enabled by default. Use **/pit config pants** to enable/disable it.
 
 ![](https://media.discordapp.net/attachments/731504203591319553/819647045153456178/unknown.png)
 
@@ -25,7 +25,7 @@ Enable/disable this feature: **/pit config pants**.
 
 If enabled (default), pit items will have an enchant glint if they got custom enchants.
 
-Enable/disable this feature: **/pit config glint**.
+Use **/pit config glint** to enable/disable it.
 
 ## Getting Started
 
