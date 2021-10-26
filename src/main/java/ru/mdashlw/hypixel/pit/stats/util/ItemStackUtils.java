@@ -30,7 +30,7 @@ public final class ItemStackUtils {
     final NBTTagCompound displayTag = tag.getCompoundTag("display");
 
     displayTag.setString("Name", name);
-    displayTag.setTag("Lore", NBTUtils.asStringTagList(lore));
+    displayTag.setTag("Lore", NbtUtils.asStringTagList(lore));
     return itemStack;
   }
 

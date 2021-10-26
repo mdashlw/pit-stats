@@ -4,9 +4,9 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
-public final class NBTUtils {
+public final class NbtUtils {
 
-  private NBTUtils() {
+  private NbtUtils() {
   }
 
   public static NBTTagList asStringTagList(final List<String> elements) {
