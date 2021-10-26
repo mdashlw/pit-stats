@@ -88,11 +88,7 @@ public final class MixinItemStack {
   public void isItemEnchanted(final CallbackInfoReturnable<Boolean> cir) {
     final HypixelPitStats mod = HypixelPitStats.getInstance();
 
-    if (mod == null) {
-      return;
-    }
-
-    if (!mod.getSettings().isBetterGlint()) {
+    if (mod == null || !mod.getSettings().isBetterGlint()) {
       return;
     }
 
