@@ -103,7 +103,7 @@ public final class PitCommand extends Command {
           .appendSibling(new ChatComponentText("§c[Click here] §7to run §b/api new")
               .setChatStyle(new ChatStyle()
                   .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                      new ChatComponentText("§7Regenerate a Hypixel API key")))
+                      new ChatComponentText("§7Regenerate your personal Hypixel API key")))
                   .setChatClickEvent(new ClickEvent(Action.RUN_COMMAND, "/api new")))));
       return;
     }
