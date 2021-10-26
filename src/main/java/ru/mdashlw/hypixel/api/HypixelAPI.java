@@ -30,8 +30,8 @@ public final class HypixelAPI {
       .setMaxConnPerRoute(24)
       .build();
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final Cache<String, String> cacheNameToUUID = CacheBuilder.newBuilder()
-      .maximumSize(1000)
+  private final Cache<String, String> cacheNameToUuid = CacheBuilder.newBuilder()
+      .maximumSize(1_000)
       .expireAfterWrite(30, TimeUnit.MINUTES)
       .build();
   private String apiKey;
@@ -50,14 +50,14 @@ public final class HypixelAPI {
     if (name.length() == 32 || name.length() == 36) {
       url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + name;
     } else {
-      final String cachedUUID = this.cacheNameToUUID.getIfPresent(name.toLowerCase(Locale.ENGLISH));
+      final String cachedUuid = this.cacheNameToUuid.getIfPresent(name.toLowerCase(Locale.ENGLISH));
 
-      if (cachedUUID != null && cachedUUID.equals("null")) {
+      if (cachedUuid != null && cachedUuid.equals("null")) {
         return null;
       }
 
-      if (cachedUUID != null) {
-        url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + cachedUUID;
+      if (cachedUuid != null) {
+        url = "https://api.hypixel.net/player?key=" + this.apiKey + "&uuid=" + cachedUuid;
       } else {
         url = "https://api.hypixel.net/player?key=" + this.apiKey + "&name=" + name;
       }
@@ -86,13 +86,13 @@ public final class HypixelAPI {
       final JsonNode playerData = data.get("player");
 
       if (playerData == null || playerData.isNull()) {
-        this.cacheNameToUUID.put(name.toLowerCase(Locale.ENGLISH), "null");
+        this.cacheNameToUuid.put(name.toLowerCase(Locale.ENGLISH), "null");
         return null;
       }
 
       final Player player = new Player(playerData);
 
-      this.cacheNameToUUID.put(player.getName().toLowerCase(Locale.ENGLISH), player.getUUID());
+      this.cacheNameToUuid.put(player.getName().toLowerCase(Locale.ENGLISH), player.getUuid());
       return player;
     } catch (final IOException exception) {
       throw new UncheckedIOException(exception);

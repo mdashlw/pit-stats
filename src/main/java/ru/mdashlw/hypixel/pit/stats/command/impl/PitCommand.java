@@ -123,7 +123,7 @@ public final class PitCommand extends Command {
             return;
           }
 
-          final String uuid = player.getUUID();
+          final String uuid = player.getUuid();
 
           mod.getHypixelAPI().getGuildByPlayerAsync(uuid)
               .exceptionally(exception -> {

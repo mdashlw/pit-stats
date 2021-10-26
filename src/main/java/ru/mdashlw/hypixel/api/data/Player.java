@@ -34,7 +34,7 @@ public final class Player {
     this.data = data;
   }
 
-  public String getUUID() {
+  public String getUuid() {
     return this.data.get("uuid").asText();
   }
 
