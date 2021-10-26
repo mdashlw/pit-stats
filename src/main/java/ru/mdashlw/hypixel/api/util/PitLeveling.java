@@ -14,7 +14,7 @@ public final class PitLeveling {
   private PitLeveling() {
   }
 
-  // https://github.com/PitPanda/PitPandaProduction/blob/master/structures/Pit.js#L1443
+  // https://github.com/PitPanda/PitPandaProduction/blob/f81206de6154cd6e3230d8db685ea2d845b5b2ce/structures/Pit.js#L1452
   public static int getLevel(final int prestige, final int totalXP) {
     int xp = (prestige > 0) ? totalXP - PRESTIGE_XPS[prestige - 1] : totalXP;
     final float multiplier = PRESTIGE_MULTIPLIERS[prestige];
