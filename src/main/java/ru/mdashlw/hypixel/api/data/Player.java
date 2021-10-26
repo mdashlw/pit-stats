@@ -116,8 +116,8 @@ public final class Player {
   }
 
   public double getLevel() {
-    final int networkExp = JsonUtils.getOptionalInt(this.data, "networkExp");
-    final int networkLevel = JsonUtils.getOptionalInt(this.data, "networkLevel");
+    final int networkExp = JsonUtils.getOptionalInt(this.data, ILeveling.EXP_FIELD);
+    final int networkLevel = JsonUtils.getOptionalInt(this.data, ILeveling.LVL_FIELD);
     final double exp = networkExp + ILeveling.getTotalExpToFullLevel(networkLevel + 1);
 
     return ILeveling.getExactLevel(exp);
