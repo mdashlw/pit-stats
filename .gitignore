@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/vscode,sublimetext,windows,linux,intellij,forgegradle,gradle,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=vscode,sublimetext,windows,linux,intellij,forgegradle,gradle,java
+# Created by https://www.toptal.com/developers/gitignore/api/intellij,forgegradle,gradle,java,linux,windows,sublimetext,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=intellij,forgegradle,gradle,java,linux,windows,sublimetext,visualstudiocode
 
 ### ForgeGradle ###
 # Minecraft client/server files
@@ -16,6 +16,9 @@ run/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+# AWS User-specific
+.idea/**/aws.xml
 
 # Generated files
 .idea/**/contentModel.xml
@@ -164,6 +167,7 @@ hs_err_pid*
 
 # SFTP configuration file
 sftp-config.json
+sftp-config-alt*.json
 
 # Package control specific files
 Package Control.last-run
@@ -181,13 +185,21 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
-### vscode ###
+### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -234,6 +246,10 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.toptal.com/developers/gitignore/api/vscode,sublimetext,windows,linux,intellij,forgegradle,gradle,java
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
 
-gradle.properties
+# End of https://www.toptal.com/developers/gitignore/api/intellij,forgegradle,gradle,java,linux,windows,sublimetext,visualstudiocode
