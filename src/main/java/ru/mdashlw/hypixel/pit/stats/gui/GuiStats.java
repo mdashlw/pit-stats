@@ -398,7 +398,7 @@ public final class GuiStats extends GuiScreen {
     super.drawScreen(mouseX, mouseY, partialTicks);
     RenderHelper.enableGUIStandardItemLighting();
     GlStateManager.pushMatrix();
-    GlStateManager.translate((float) this.x, (float) this.y, 0F);
+    GlStateManager.translate(this.x, this.y, 0F);
     GlStateManager.color(1F, 1F, 1F, 1F);
     GlStateManager.enableRescaleNormal();
     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
@@ -412,8 +412,8 @@ public final class GuiStats extends GuiScreen {
       if (hoveredSlot == null && this.isMouseOverSlot(slot, mouseX, mouseY)) {
         hoveredSlot = slot;
 
-        final int x = slot.x;
-        final int y = slot.y;
+        final int x = slot.getX();
+        final int y = slot.getY();
 
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
@@ -455,8 +455,8 @@ public final class GuiStats extends GuiScreen {
   }
 
   public void drawSlot(final Slot slot) {
-    final int x = slot.x;
-    final int y = slot.y;
+    final int x = slot.getX();
+    final int y = slot.getY();
     final ItemStack itemStack = slot.getItemStack();
     boolean render = true;
 
@@ -486,7 +486,7 @@ public final class GuiStats extends GuiScreen {
   }
 
   public boolean isMouseOverSlot(final Slot slot, final int mouseX, final int mouseY) {
-    return this.isPointInRegion(slot.x, slot.y, 16, 16, mouseX, mouseY);
+    return this.isPointInRegion(slot.getX(), slot.getY(), 16, 16, mouseX, mouseY);
   }
 
   public boolean isPointInRegion(final int left, final int top, final int right, final int bottom,
