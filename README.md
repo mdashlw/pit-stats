@@ -11,7 +11,7 @@ The main purpose of this mod is to provide an improved version of the /view comm
 You can watch a review of this on YouTube: https://youtu.be/RQRD0_a83fI. Please note that this video is slightly
 outdated.
 
-Use **/pit <name> (or /pitstats, /pitinfo)** to open the statistics viewer.
+Use **/pit \<name> (or /pitstats, /pitinfo)** to open the statistics viewer.
 
 ### - Required Pants for Mystic Items (since v1.3.1)
 
