@@ -206,11 +206,6 @@ public final class Player {
       private static final Map<String, Upgrade> UPGRADES = new LinkedHashMap<>();
       private static final Map<String, Perk> PERKS = new HashMap<>();
       private static final Map<String, Killstreak> KILLSTREAKS = new HashMap<>();
-      private static final String[] LEVEL_COLORS = {"§7", "§9", "§3", "§2", "§a", "§e", "§6§l", "§c§l", "§4§l", "§5§l",
-          "§d§l", "§f§l", "§b§l"};
-      private static final String[] PRESTIGE_COLORS = {"§7", "§9", "§9", "§9", "§9", "§e", "§e", "§e", "§e", "§e", "§6",
-          "§6", "§6", "§6", "§6", "§c", "§c", "§c", "§c", "§c", "§5", "§5", "§5", "§5", "§5", "§d", "§d", "§d", "§d",
-          "§d", "§f", "§f", "§f", "§f", "§f", "§b"};
 
       static {
         UPGRADES.put("xp_boost", new Upgrade("XP Boost", Arrays.asList(
@@ -535,6 +530,17 @@ public final class Player {
           return (int) Math.round(JsonUtils.getOptionalDouble(this.data, "cash"));
         }
 
+        // https://github.com/PitPanda/PitPandaProduction/blob/e29cdd30f24c33397dbd47ff0e991b5b350c875d/structures/Pit.js#L271
+        public long getPrestigeXp() {
+          final int prestige = this.getPrestige();
+
+          if (prestige <= 0) {
+            return this.getXP();
+          }
+
+          return this.getXP() - PitLeveling.Prestige.getPrestiges()[prestige - 1].getSumXp();
+        }
+
         public int getXP() {
           return JsonUtils.getOptionalInt(this.data, "xp");
         }
@@ -589,20 +595,21 @@ public final class Player {
         }
 
         public int getLevel() {
-          return PitLeveling.getLevel(this.getPrestige(), this.getXP());
+          return PitLeveling.getLevel(this.getPrestige(), this.getPrestigeXp());
         }
 
+        // https://github.com/PitPanda/PitPandaProduction/blob/e29cdd30f24c33397dbd47ff0e991b5b350c875d/structures/Pit.js#L197
         public String getFormattedLevel() {
           final int prestige = this.getPrestige();
           final int level = this.getLevel();
 
-          final String levelColor = Pit.LEVEL_COLORS[(int) Math.floor(level / 10D)];
+          final String levelColor = PitLeveling.Level.getLevels()[(int) Math.floor(level / 10.0)].getColorCode();
 
           if (prestige == 0) {
             return "§7[" + levelColor + level + "§r§7]";
           }
 
-          final String prestigeColor = Pit.PRESTIGE_COLORS[prestige];
+          final String prestigeColor = PitLeveling.Prestige.getPrestiges()[prestige].getColorCode();
 
           return prestigeColor + "[§e" + NumberUtils.toRomanNumeral(prestige) + prestigeColor + '-' + levelColor + level
               + "§7" + prestigeColor
